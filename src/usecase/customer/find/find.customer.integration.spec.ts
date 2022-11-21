@@ -1,56 +1,56 @@
-import { Sequelize } from "sequelize-typescript";
+import {Sequelize} from "sequelize-typescript"
 import Customer from "../../../domain/customer/entity/customer";
 import Address from "../../../domain/customer/value-object/address";
 import CustomerModel from "../../../infrastructure/customer/repository/sequelize/customer.model";
 import CustomerRepository from "../../../infrastructure/customer/repository/sequelize/customer.repository";
 import FindCustomerUseCase from "./find.customer.usecase";
 
-describe("Test find customer use case", () => {
-  let sequelize: Sequelize;
+describe("Find customer use case integration test", () => {
 
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: "sqlite",
-      storage: ":memory:",
-      logging: false,
-      sync: { force: true },
+    let sequelize: Sequelize;
+
+    beforeEach(async () => {
+        sequelize = new Sequelize({
+            dialect: "sqlite",
+            storage: ":memory:",
+            logging: false,
+            sync: {force: true},
+        });
+
+        await sequelize.addModels([CustomerModel]);
+        await sequelize.sync();
+    });
+    
+    afterEach(async () => {
+        await sequelize.close();
     });
 
-    await sequelize.addModels([CustomerModel]);
-    await sequelize.sync();
-  });
+    it("should find a customer", async () => {
+        const customer = new Customer("1", "Bruno");
+        const customerAddress = new Address("Street 1", 1, "93933939", "City 1");
+        customer.changeAddress(customerAddress);
 
-  afterEach(async () => {
-    await sequelize.close();
-  });
+        const customerRepository = new CustomerRepository();
+        await customerRepository.create(customer);
+        const findCustomerUseCase = new FindCustomerUseCase(customerRepository);
 
-  it("should find a customer", async () => {
-    const customerRepository = new CustomerRepository();
-    const usecase = new FindCustomerUseCase(customerRepository);
+        const customerInput = {
+            id: "1"
+        };
 
-    const customer = new Customer("123", "John");
-    const address = new Address("Street", 123, "Zip", "City");
-    customer.changeAddress(address);
+        const result = await findCustomerUseCase.execute(customerInput);
+        const customerOutput = {
+            id: "1",
+            name: "Bruno",
+            address: {
+                street: "Street 1",
+                city: "City 1",
+                number: 1,
+                zip: "93933939"
+            }
+        };
+        expect(result).toEqual(customerOutput);
+    });
 
-    await customerRepository.create(customer);
 
-    const input = {
-      id: "123",
-    };
-
-    const output = {
-      id: "123",
-      name: "John",
-      address: {
-        street: "Street",
-        city: "City",
-        number: 123,
-        zip: "Zip",
-      },
-    };
-
-    const result = await usecase.execute(input);
-
-    expect(result).toEqual(output);
-  });
 });
