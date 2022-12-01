@@ -23,7 +23,7 @@ customerRoute.post('/', async (req: Request, res: Response) => {
         res.send(output);
 
     }catch(err) {
-        res.status (500).send(err)
+        res.status(500).send(err)
     }
 });
 
@@ -35,6 +35,6 @@ customerRoute.get('/', async (req: Request, res: Response) => {
         res.send(output);
 
     }catch(err) {
-        res.status (500).send(err)
+        res.status(500).send(err)
     }
 });
