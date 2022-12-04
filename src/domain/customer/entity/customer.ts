@@ -1,7 +1,8 @@
 import Entity from "../../@shared/entity/entity.abstract";
 import Address from "../value-object/address";
-import NotificationError from "../../@shared/notification/notification.error";
+// import NotificationError from "../../@shared/notification/notification.error";
 import CustomerValidatorFactory from "../factory/customer.validator.factory";
+import NotificationError from "../../@shared/notification/notification.error";
 
 export default class Customer extends Entity {
   private _name: string = "";
@@ -9,15 +10,15 @@ export default class Customer extends Entity {
   private _active: boolean = false;
   private _rewardPoints: number = 0;
 
-  constructor(id: string, name: string) {
-    super();
-    this._id = id;
-    this._name = name;
-    this.validate();
-    if (this.notification.hasErrors()) {
-      throw new NotificationError(this.notification.getErrors());
+    constructor(id: string, name: string) {
+        super();
+        this._id = id;
+        this._name = name;
+        this.validate();
+        if (this.notification.hasErrors()) {
+            throw new NotificationError(this.notification.errors());
+        }
     }
-  }
 
   get name(): string {
     return this._name;
@@ -27,14 +28,27 @@ export default class Customer extends Entity {
     return this._rewardPoints;
   }
 
-  validate() {
-    CustomerValidatorFactory.create().validate(this);
-  }
+    validate() {
+        // CustomerValidatorFactory.create().validate(this);
+        if(this.id.length === 0){
+            this.notification.addError({
+                message: "Id is required",
+                context: "customer"
+            });
+        }
 
-  changeName(name: string) {
-    this._name = name;
-    this.validate();
-  }
+        if(this.name.length === 0){
+            this.notification.addError({
+                message: "Name is required",
+                context: "customer"
+            });
+        }
+    }
+
+    changeName(name: string) {
+        this._name = name;
+        this.validate();
+    }
 
   get Address(): Address {
     return this._address;
