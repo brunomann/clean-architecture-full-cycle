@@ -29,20 +29,20 @@ export default class Customer extends Entity {
   }
 
     validate() {
-        // CustomerValidatorFactory.create().validate(this);
-        if(this.id.length === 0){
-            this.notification.addError({
-                message: "Id is required",
-                context: "customer"
-            });
-        }
+        CustomerValidatorFactory.create().validate(this);
+        // if(this.id.length === 0){
+        //     this.notification.addError({
+        //         message: "Id is required",
+        //         context: "customer"
+        //     });
+        // }
 
-        if(this.name.length === 0){
-            this.notification.addError({
-                message: "Name is required",
-                context: "customer"
-            });
-        }
+        // if(this.name.length === 0){
+        //     this.notification.addError({
+        //         message: "Name is required",
+        //         context: "customer"
+        //     });
+        // }
     }
 
     changeName(name: string) {
