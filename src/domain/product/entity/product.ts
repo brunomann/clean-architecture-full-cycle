@@ -4,8 +4,8 @@ import ProductValidatorFactory from "../factory/product.validator.factory";
 import ProductInterface from "./product.interface";
 
 export default class Product extends Entity implements ProductInterface {
-  private _name: string;
-  private _price: number;
+    private _name: string;
+    private _price: number;
 
     constructor(id: string, name: string, price: number) {
         super();
@@ -18,27 +18,26 @@ export default class Product extends Entity implements ProductInterface {
         }
     }
 
-  
-  get name(): string {
-    return this._name;
-  }
+    get name(): string {
+        return this._name;
+    }
 
-  get price(): number {
-    return this._price;
-  }
+    get price(): number {
+        return this._price;
+    }
 
-  changeName(name: string): void {
-    this._name = name;
-    this.validate();
-  }
+    changeName(name: string): void {
+        this._name = name;
+        this.validate();
+    }
 
-  changePrice(price: number): void {
-    this._price = price;
-    this.validate();
-  }
+    changePrice(price: number): void {
+        this._price = price;
+        this.validate();
+    }
 
-  validate():void {
-    ProductValidatorFactory.create().validate(this);
+    validate():void {
+        ProductValidatorFactory.create().validate(this);
     // if (this._id.length === 0) {
     //   this.notification.addError({
     //     message: "Id is required",
@@ -57,5 +56,5 @@ export default class Product extends Entity implements ProductInterface {
     //     context: "product"
     //   });
     // }
-  }
+    }
 }

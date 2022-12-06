@@ -14,12 +14,12 @@ export default class ProductYupValidator implements ValidatorInterface<Product>{
             })
             .validateSync(
                 {
-                  id: entity.id,
-                  name: entity.name,
-                  price: entity.price,
+                    id: entity.id,
+                    name: entity.name,
+                    price: entity.price,
                 },
                 {
-                  abortEarly: false,
+                    abortEarly: false,
                 }
             );
         }catch (errors){
